@@ -11,7 +11,7 @@ contract HelloWorld {
     
     Person[] public people;
     
-    mapping(address => uint) public totPeople; //maps 
+    mapping(address => uint) public totPeople; 
     
     function addAccounts(address ethAddress, Person[] memory ppl) private returns(uint) {
         uint i;
