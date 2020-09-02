@@ -18,4 +18,13 @@ contract HelloWorld {
         people.push(Person(people.length, acct, name, age, height));
         totPeople[acct] = totPeople[acct]+1;
     }
+    // function IDarray(uint index, address addr, Person[] memory ppl) public{
+    //     uint[] memory idsInAddress;
+    //     uint i;
+    //     for(i=0; i < ppl.length; i++){
+    //         if(ppl[ppl.length -1].account == ppl[i].account){
+    //             idsInAddress.push(ppl[i].id);
+    //         }
+    //     } 
+    // }
 }
