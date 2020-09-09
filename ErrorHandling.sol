@@ -1,6 +1,9 @@
+import "./Ownable.sol";
+import "./Destroyable.sol";
+
 pragma solidity 0.5.12;
 
-contract HelloWorld {
+contract HelloWorld is Ownable, Destroyable {
     struct Person {
         uint id;
         string name;
@@ -13,22 +16,22 @@ contract HelloWorld {
     event PersonDeleted(string name, uint age, address deletedBy);
     event PersonUpdated(string name, uint age, uint height, address updatedBy);
     
-    address public owner;
+    uint public balance;
     
-    modifier onlyOwner(){
-        require(msg.sender == owner);
-        _; //continue execution
+    modifier costs(uint cost){
+        require(msg.value >= cost);
+        _;
     }
     
-    constructor() public{
-        owner = msg.sender;
-    }
     mapping(address => bool) private hasCreated;
     mapping(address => Person) private people; 
     address[] private creators;
     
-    function createPerson(string memory name, uint age, uint height) public{
+    function createPerson(string memory name, uint age, uint height) public payable{
         require(age <= 150, "Age needs to be below 150");
+        require(msg.value >= 1 ether);
+        balance += msg.value;
+        
         Person memory newPerson;
         newPerson.name = name;
         newPerson.age = age;
@@ -82,7 +85,7 @@ contract HelloWorld {
     function updatePerson(string memory name, uint age, uint height) public{
         require(hasCreated[msg.sender], "this person does not exist.");
         Person memory oldPerson = people[msg.sender];
-        Person memory newPerson = oldPerson;
+        Person memory newPerson = people[msg.sender];
         newPerson.name = name;
         newPerson.age = age;
         newPerson.height = height;
@@ -94,21 +97,21 @@ contract HelloWorld {
         }
         
         insertPerson(newPerson);
-        // assert(
-        //     keccak256(abi.encodePacked(
-        //         newPerson.name, 
-        //         newPerson.age, 
-        //         newPerson.height)
-        //         ) 
-        //         != 
-        //         keccak256(
-        //             abi.encodePacked(
-        //                 oldPerson.name, 
-        //                 oldPerson.age, 
-        //                 oldPerson.height
-        //                 )
-        //             )   
-        //         );
+        assert(
+            keccak256(abi.encodePacked(
+                newPerson.name, 
+                newPerson.age, 
+                newPerson.height)
+                ) 
+                != 
+                keccak256(
+                    abi.encodePacked(
+                        oldPerson.name, 
+                        oldPerson.age, 
+                        oldPerson.height
+                        )
+                    )   
+                );
         emit PersonUpdated(name, age, height, msg.sender);
     }
     
