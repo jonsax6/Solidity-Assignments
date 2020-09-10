@@ -72,17 +72,18 @@ contract People is Ownable, Destroyable {
         return (people[creator].name, people[creator].age, people[creator].height);
     }
     
-    function verifyRemoved(string memory name, uint age, address removed) internal {
-        assert(people[removed].age == 0);
-        emit PersonDeleted(name, age, msg.sender);
-        
+    // helper function to remove a Person from the people mapping 
+    function removePerson(address toRemove) internal{
+        string memory name = people[toRemove].name;
+        uint age = people[toRemove].age;
+        delete people[toRemove];
+        assert(people[toRemove].age == 0);
+        emit PersonDeleted(name, age, msg.sender);    
     }
     
+    // only owner function to delete a Person from person mapping
     function deletePerson(address creator) public onlyOwner{
-        string memory name = people[creator].name;
-        uint age = people[creator].age;
-        delete people[creator];
-        verifyRemoved(name, age, creator);
+        removePerson(creator);
     }    
     
     function updatePerson(string memory name, uint age, uint height) public{

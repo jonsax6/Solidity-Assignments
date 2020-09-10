@@ -1,5 +1,3 @@
-import "./Ownable.sol";
-
 // Should inherit from the People Contract. 
 import "./People.sol";
 
@@ -33,16 +31,16 @@ contract Workers is Ownable, People{
         // For the address of each worker created, map the address of the employer
         employer[msg.sender] = boss;
     }
-    // Implement a fire function, which removes the worker from the contract.
+    // Implement a fire function, which removes the worker from the contract (people mapping).
     function fireWorker(address terminated) public {
         // Make sure that a worker can only be fired by his/her boss.
         require(msg.sender == employer[terminated]);
-        string memory name = people[terminated].name;
-        uint age = people[terminated].age;
-        delete people[terminated];
         // By implementing a new function in the base contract, used by both deletePerson and fire, make sure there is as little code 
         // duplication as possible between the deletePerson function and the fire function. 
-        verifyRemoved(name, age, terminated);
+        removePerson(terminated);
+        delete employer[terminated];
+        delete annSalary[terminated];
+
     }
 }
 
