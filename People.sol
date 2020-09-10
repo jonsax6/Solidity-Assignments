@@ -24,12 +24,10 @@ contract People is Ownable, Destroyable {
     }
     
     mapping(address => bool) private hasCreated;
-    mapping(address => Person) private people; 
+    mapping(address => Person) internal people; 
     address[] private creators;
     
-    function createPerson(string memory name, uint age, uint height) public payable{
-        require(age <= 150, "Age needs to be below 150");
-        require(msg.value >= 1 ether);
+    function createPerson(string memory name, uint age, uint height) internal costs(100 wei){
         balance += msg.value;
         
         Person memory newPerson;
@@ -74,12 +72,17 @@ contract People is Ownable, Destroyable {
         return (people[creator].name, people[creator].age, people[creator].height);
     }
     
+    function verifyRemoved(string memory name, uint age, address removed) internal {
+        assert(people[removed].age == 0);
+        emit PersonDeleted(name, age, msg.sender);
+        
+    }
+    
     function deletePerson(address creator) public onlyOwner{
         string memory name = people[creator].name;
         uint age = people[creator].age;
         delete people[creator];
-        assert(people[creator].age == 0);
-        emit PersonDeleted(name, age, msg.sender);
+        verifyRemoved(name, age, creator);
     }    
     
     function updatePerson(string memory name, uint age, uint height) public{
