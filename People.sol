@@ -1,9 +1,8 @@
-import "./Ownable.sol";
 import "./Destroyable.sol";
 
 pragma solidity 0.5.12;
 
-contract People is Ownable, Destroyable {
+contract People is Destroyable {
     struct Person {
         uint id;
         string name;
