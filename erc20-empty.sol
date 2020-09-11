@@ -16,7 +16,6 @@ contract ERC20 {
         _decimals = 18;
     }
 
-
     function name() public view returns (string memory) {
         return _name;
     }
