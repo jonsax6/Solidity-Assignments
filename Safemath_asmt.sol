@@ -50,7 +50,7 @@ contract ERC20 {
         require(recipient !=  address(0), "transfer to the zero address");
         require(_balances[msg.sender] >= amount, "Insufficient balance");
 
-        _balances[msg.sender] = _balances[msg.sender].subtract(amount);
+        _balances[msg.sender] = _balances[msg.sender].sub(amount);
         _balances[recipient] = _balances[recipient].add(amount);
 
         return true;
