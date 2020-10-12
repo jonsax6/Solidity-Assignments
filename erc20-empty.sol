@@ -10,10 +10,10 @@ contract ERC20 {
     string private _symbol;
     uint8 private _decimals;
 
-        constructor (string memory name, string memory symbol) public {
-        _name = name;
-        _symbol = symbol;
-        _decimals = 18;
+    constructor (string memory name, string memory symbol) public {
+    _name = name;
+    _symbol = symbol;
+    _decimals = 18;
     }
 
     function name() public view returns (string memory) {
@@ -30,6 +30,7 @@ contract ERC20 {
 
     function totalSupply() public view returns (uint256) {
         return _totalSupply;
+    }
 
     function balanceOf(address account) public view returns (uint256) {
         return _balances[account];
